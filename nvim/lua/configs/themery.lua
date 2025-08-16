@@ -1,0 +1,3 @@
+return {
+    -- themes = {"gruvbox", "ayujk}
+}
