@@ -1,0 +1,6 @@
+add-auto-load-safe-path /home/pavel/polling-patch/linux-dev/scripts/gdb/vmlinux-gdb.py
+add-auto-load-safe-path /home/pavel/polling-patch/linux-qemu/scripts/gdb/vmlinux-gdb.py
+add-auto-load-safe-path /home/pavel/polling-patch/linux/scripts/gdb/vmlinux-gdb.py
+set print pretty on
+set history save on
+set disassembly-flavor intel

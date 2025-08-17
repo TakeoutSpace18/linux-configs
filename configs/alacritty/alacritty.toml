@@ -1,0 +1,13 @@
+[font.normal]
+family = "JetBrainsMono Nerd Font"
+style = "Regular"
+
+[font]
+size = 10.5
+
+[shell]
+args = []
+program = "/bin/fish"
+
+[window]
+opacity = 0.9
