@@ -8,5 +8,7 @@ end
 
 source ~/.bash_aliases
 
+fzf_key_bindings
+
 # Created by `pipx` on 2025-03-02 13:28:44
 set PATH $PATH /home/pavel/.local/bin
