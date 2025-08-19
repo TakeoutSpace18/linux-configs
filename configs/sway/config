@@ -132,6 +132,18 @@ exec swayidle -w \
     # Note: workspaces can have any name you want, not just numbers.
     # We just use 1-10 as the default.
 
+    # Move focused workspace between monitors
+    bindsym $mod+Ctrl+Shift+$left move workspace to output left
+    bindsym $mod+Ctrl+Shift+$down move workspace to output down
+    bindsym $mod+Ctrl+Shift+$up move workspace to output up
+    bindsym $mod+Ctrl+Shift+$right move workspace to output right
+    
+    # Ditto, with arrow keys
+    bindsym $mod+Ctrl+Shift+Left move workspace to output left
+    bindsym $mod+Ctrl+Shift+Down move workspace to output down
+    bindsym $mod+Ctrl+Shift+Up move workspace to output up
+    bindsym $mod+Ctrl+Shift+Right move workspace to output right
+
 # Layout stuff:
     # You can "split" the current object of your focus with
     # $mod+b or $mod+v, for horizontal and vertical splits
@@ -212,7 +224,6 @@ set $laptop eDP-1
 bindswitch --reload --locked lid:on output $laptop disable
 bindswitch --reload --locked lid:off output $laptop enable; exec nm-applet
 
-
 input type:touchpad {
 	natural_scroll enabled
 	tap enabled
@@ -235,17 +246,12 @@ bindsym XF86AudioLowerVolume exec --no-startup-id pactl set-sink-volume @DEFAULT
 bindsym XF86AudioMute exec --no-startup-id pactl set-sink-mute @DEFAULT_SINK@ toggle && $refresh_i3status
 bindsym XF86AudioMicMute exec --no-startup-id pactl set-source-mute @DEFAULT_SOURCE@ toggle && $refresh_i3status
 
-
 bindsym XF86AudioPlay exec playerctl play-pause && $refresh_i3status
 bindsym XF86AudioNext exec playerctl next && $refresh_i3status
 bindsym XF86AudioPrev exec playerctl previous && $refresh_i3status
 
 bindsym XF86MonBrightnessUp exec brightnessctl set +3%
 bindsym XF86MonBrightnessDown exec brightnessctl set 3%-
-
-# move focused workspace between monitors
-bindsym $mod+Ctrl+Shift+Right move workspace to output right
-bindsym $mod+Ctrl+Shift+Left move workspace to output left
 
 # Screenshots
 bindsym {

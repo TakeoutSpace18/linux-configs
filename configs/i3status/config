@@ -21,6 +21,7 @@ order += "ethernet _first_"
 order += "battery all"
 order += "load"
 order += "memory"
+order += "volume master"
 order += "tztime local"
 
 wireless _first_ {
@@ -61,6 +62,12 @@ memory {
         format = "mem: %used | %available"
         threshold_degraded = "1G"
         format_degraded = "MEMORY < %available"
+}
+
+volume master {
+    format = "♪ (%devicename): %volume"
+    format_muted = "♪ (%devicename): muted"
+    device = "pulse"
 }
 
 tztime local {
