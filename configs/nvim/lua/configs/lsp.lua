@@ -56,6 +56,7 @@ local servers = {
 	"bashls",
 	"basedpyright",
 	"ts_ls",
+    "jsonls"
 }
 
 local lspconfig = require("lspconfig")

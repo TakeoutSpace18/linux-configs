@@ -75,23 +75,22 @@ end, { desc = "New vertical terminal" })
 
 -- Day/night theme switch
 map("n", "<leader>tt", function()
-    local light = "catppuccin-latte"
-    local dark = "kanagawa-wave"
+	local light = "catppuccin-latte"
+	local dark = "kanagawa-wave"
 
-    -- WARN: 'kanagawa-wave' theme name returned by vim.g.colors_name is just 'kanagawa',
-    -- so check for light currentTheme first
-    local currentTheme = vim.g.colors_name or "none"
+	-- WARN: 'kanagawa-wave' theme name returned by vim.g.colors_name is just 'kanagawa',
+	-- so check for light currentTheme first
+	local currentTheme = vim.g.colors_name or "none"
 	if currentTheme == light then
-        vim.cmd("colorscheme " .. dark)
+		vim.cmd("colorscheme " .. dark)
 	else
-        vim.cmd("colorscheme " .. light)
+		vim.cmd("colorscheme " .. light)
 	end
-
 end, { noremap = true })
 
 -- Theme switch
-map("n", "<leader>ts", function ()
-    require("telescope.builtin").colorscheme({enable_preview = true})
+map("n", "<leader>ts", function()
+	require("telescope.builtin").colorscheme({ enable_preview = true })
 end, { desc = "Theme switcher" })
 
 -- Session management
@@ -114,4 +113,9 @@ end)
 -- Stop Persistence => session won't be saved on exit
 map("n", "<leader>qd", function()
 	require("persistence").stop()
+end)
+
+-- Hex view toggle
+map("n", "<leader>ht", function()
+	require("hex").toggle()
 end)

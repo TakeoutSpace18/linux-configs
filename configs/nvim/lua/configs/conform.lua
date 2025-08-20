@@ -1,5 +1,6 @@
 return {
 	formatters_by_ft = {
-		lua = { "stylua" },
+		lua = { "stylua"},
+        json = { "jq" },
 	},
 }

@@ -44,3 +44,6 @@ opt.colorcolumn = "80"
 opt.cmdheight = 0
 
 o.clipboard = "unnamedplus"
+
+o.foldmethod = "syntax"
+o.foldenable = false
