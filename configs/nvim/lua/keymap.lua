@@ -6,8 +6,6 @@ map("n", "-", "<CMD>Oil<CR>", { desc = "Open parent directory" })
 -- Move lines
 map("n", "<S-j>", ":m .+1<CR>==", { noremap = true })
 map("n", "<S-k>", ":m .-2<CR>==", { noremap = true })
-map("i", "<S-j>", "<Esc>:m .+1<CR>==gi", { noremap = true })
-map("i", "<S-k>", "<Esc>:m .-2<CR>==gi", { noremap = true })
 map("v", "<S-j>", ":m '>+1<CR>gv=gv", { noremap = true })
 map("v", "<S-k>", ":m '<-2<CR>gv=gv", { noremap = true })
 
