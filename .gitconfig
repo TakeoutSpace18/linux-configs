@@ -1,0 +1,17 @@
+[alias]
+	co = checkout
+	br = branch
+	ci = commit
+	st = status
+	unstage = reset HEAD --
+	last = log -1 HEAD
+[user]
+	email = p.urdin@g.nsu.ru
+	name = Pavel Urdin
+	signingkey = /home/pavel/.ssh/id_rsa.pub
+[gpg]
+	format = ssh
+[commit]
+	gpgsign = true
+[init]
+	defaultBranch = main

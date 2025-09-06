@@ -16,3 +16,5 @@ alias rb=reboot
 alias r='ranger'
 alias nv='nvim'
 alias bp='bpython'
+
+alias cat='bat'

@@ -234,6 +234,11 @@ input type:tablet_tool {
     map_to_output DP-1
 }
 
+# ThinkPad TrackPoint
+input 2:10:TPPS/2_Elan_TrackPoint {
+    pointer_accel -0.25
+}
+
 default_border pixel
 
 input type:keyboard xkb_layout us,ru
@@ -250,8 +255,8 @@ bindsym XF86AudioPlay exec playerctl play-pause && $refresh_i3status
 bindsym XF86AudioNext exec playerctl next && $refresh_i3status
 bindsym XF86AudioPrev exec playerctl previous && $refresh_i3status
 
-bindsym XF86MonBrightnessUp exec brightnessctl set +3%
-bindsym XF86MonBrightnessDown exec brightnessctl set 3%-
+bindsym XF86MonBrightnessUp exec brightnessctl set +6%
+bindsym XF86MonBrightnessDown exec brightnessctl set 6%-
 
 # Screenshots
 bindsym {
