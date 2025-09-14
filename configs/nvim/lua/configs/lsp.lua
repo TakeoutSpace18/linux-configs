@@ -9,6 +9,8 @@ M.on_attach = function(_, bufnr)
 
 	map("n", "gD", vim.lsp.buf.declaration, opts("Go to declaration"))
 	map("n", "gd", vim.lsp.buf.definition, opts("Go to definition"))
+	map("n", "<C-]>", vim.lsp.buf.definition, opts("Go to definition"))
+
 	map("n", "<leader>wa", vim.lsp.buf.add_workspace_folder, opts("Add workspace folder"))
 	map("n", "<leader>wr", vim.lsp.buf.remove_workspace_folder, opts("Remove workspace folder"))
 
@@ -20,6 +22,7 @@ M.on_attach = function(_, bufnr)
 
 	map("n", "<leader>D", vim.lsp.buf.type_definition, opts("Go to type definition"))
 	--map("n", "<leader>ra", require "nvchad.lsp.renamer", opts "NvRenamer")
+
 end
 
 -- disable semanticTokens

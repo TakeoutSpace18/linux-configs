@@ -49,3 +49,5 @@ o.clipboard = "unnamedplus"
 
 o.foldmethod = "syntax"
 o.foldenable = false
+
+opt.shell = '/usr/bin/fish'

@@ -12,9 +12,12 @@ alias google-chrome='google-chrome --enable-features=UseOzonePlatform --ozone-pl
 alias c=clear
 alias po=poweroff
 alias rb=reboot
+alias lock='swaylock -c 000000'
 
 alias r='ranger'
 alias nv='nvim'
 alias bp='bpython'
 
 alias cat='bat'
+
+alias psql='PAGER=pspg psql'
