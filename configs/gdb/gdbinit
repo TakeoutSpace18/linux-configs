@@ -4,3 +4,4 @@ add-auto-load-safe-path /home/pavel/polling-patch/linux/scripts/gdb/vmlinux-gdb.
 set print pretty on
 set history save on
 set disassembly-flavor intel
+set debuginfod enabled off
