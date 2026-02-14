@@ -1,8 +1,8 @@
 return {
 	-- maps related defaults
-	disable_maps = false, -- "true" disables default keymaps
+	disable_maps = false,   -- "true" disables default keymaps
 	skip_input_prompt = false, -- "true" doesn't ask for input
-	prefix = "<leader>c", -- prefix to trigger maps
+	prefix = "<leader>c",   -- prefix to trigger maps
 
 	-- cscope related defaults
 	cscope = {
@@ -37,7 +37,7 @@ return {
 		-- cstag related defaults
 		tag = {
 			-- bind ":Cstag" to "<C-]>"
-			keymap = true, -- "true" or "false"
+			keymap = true,                -- "true" or "false"
 			-- order of operation to run for ":Cstag"
 			order = { "cs", "tag_picker", "tag" }, -- any combination of these 3 (ops can be excluded)
 			-- cmd to use for "tag" op in above table

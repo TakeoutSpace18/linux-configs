@@ -31,31 +31,30 @@ map({ "n", "x" }, "<leader>fm", function()
 	require("conform").format({ lsp_fallback = true })
 end, { desc = "general format file" })
 
--- Global lsp mappings
-map("n", "<leader>ds", vim.diagnostic.setloclist, { desc = "LSP diagnostic loclist" })
-
 -- Comment
 map("n", "<leader>/", "gcc", { desc = "toggle comment", remap = true })
 map("v", "<leader>/", "gc", { desc = "toggle comment", remap = true })
 
 -- Telescope
-map("n", "<leader>fw", "<cmd>Telescope live_grep<CR>", { desc = "telescope live grep" })
-map("n", "<leader>fb", "<cmd>Telescope buffers<CR>", { desc = "telescope find buffers" })
-map("n", "<leader>fh", "<cmd>Telescope help_tags<CR>", { desc = "telescope help page" })
-map("n", "<leader>ma", "<cmd>Telescope marks<CR>", { desc = "telescope find marks" })
-map("n", "<leader>fo", "<cmd>Telescope oldfiles<CR>", { desc = "telescope find oldfiles" })
-map("n", "<leader>fz", "<cmd>Telescope current_buffer_fuzzy_find<CR>", { desc = "telescope find in current buffer" })
-map("n", "<leader>cm", "<cmd>Telescope git_commits<CR>", { desc = "telescope git commits" })
-map("n", "<leader>gt", "<cmd>Telescope git_status<CR>", { desc = "telescope git status" })
-map("n", "<leader>pt", "<cmd>Telescope terms<CR>", { desc = "telescope pick hidden term" })
+local tb = require("telescope.builtin")
+map("n", "<leader>fw", tb.live_grep, { desc = "telescope live grep" })
+map("n", "<leader>fb", tb.buffers, { desc = "telescope find buffers" })
+map("n", "<leader>fh", tb.help_tags, { desc = "telescope help page" })
+map("n", "<leader>ma", tb.marks, { desc = "telescope find marks" })
+map("n", "<leader>fo", tb.oldfiles, { desc = "telescope find oldfiles" })
+map("n", "<leader>fz", tb.current_buffer_fuzzy_find, { desc = "telescope find in current buffer" })
+map("n", "<leader>cm", tb.git_commits, { desc = "telescope git commits" })
+map("n", "<leader>gt", tb.git_status, { desc = "telescope git status" })
+map("n", "<leader>br", tb.git_branches, { desc = "Git branches" })
+map("n", "<leader>ff", tb.find_files, { desc = "telescope find files" })
 
-map("n", "<leader>ff", "<cmd>Telescope find_files<cr>", { desc = "telescope find files" })
-map(
-	"n",
-	"<leader>fa",
-	"<cmd>Telescope find_files follow=true no_ignore=true hidden=true<CR>",
-	{ desc = "telescope find all files" }
-)
+map("n", "<leader>fa", function()
+	tb.find_files({
+		follow = true,
+		no_ignore = true,
+		hidden = true,
+	})
+end, { desc = "telescope find all files" })
 
 -- Terminal
 map("t", "<C-x>", "<C-\\><C-N>", { desc = "terminal escape terminal mode" })
@@ -92,16 +91,13 @@ map("n", "<leader>ts", function()
 end, { desc = "Theme switcher" })
 
 -- Session management
-
 -- Load the session for the current directory
 map("n", "<leader>qs", function()
 	require("persistence").load()
 end)
 
 -- Select a session to load
-map("n", "<leader>qS", function()
-	require("persistence").select()
-end)
+map("n", "<leader>qS", require("persistence").select)
 
 -- Load the last session
 map("n", "<leader>ql", function()
@@ -109,11 +105,44 @@ map("n", "<leader>ql", function()
 end)
 
 -- Stop Persistence => session won't be saved on exit
-map("n", "<leader>qd", function()
-	require("persistence").stop()
-end)
+map("n", "<leader>qd", require("persistence").stop)
 
 -- Hex view toggle
 map("n", "<leader>ht", function()
 	require("hex").toggle()
 end)
+
+-- Show diagnostic message
+map('n', '<leader>k', function()
+	vim.diagnostic.open_float()
+end)
+
+---@param jumpCount number
+local function jumpWithVirtLineDiags(jumpCount)
+	pcall(vim.api.nvim_del_augroup_by_name, "jumpWithVirtLineDiags") -- prevent autocmd for repeated jumps
+
+	vim.diagnostic.jump { count = jumpCount }
+
+	local initialVirtTextConf = vim.diagnostic.config().virtual_text
+	vim.diagnostic.config {
+		virtual_text = false,
+		virtual_lines = { current_line = true },
+	}
+
+	vim.defer_fn(function() -- deferred to not trigger by jump itself
+		vim.api.nvim_create_autocmd("CursorMoved", {
+			desc = "User(once): Reset diagnostics virtual lines",
+			once = true,
+			group = vim.api.nvim_create_augroup("jumpWithVirtLineDiags", {}),
+			callback = function()
+				vim.diagnostic.config { virtual_lines = false, virtual_text = initialVirtTextConf }
+			end,
+		})
+	end, 1)
+end
+
+map("n", "ge", function() jumpWithVirtLineDiags(1) end, { desc = "󰒕 Next diagnostic" })
+map("n", "gE", function() jumpWithVirtLineDiags(-1) end, { desc = "󰒕 Prev diagnostic" })
+
+-- Toggle zen mode
+map("n", "<leader>zz", ":ZenMode<CR>")

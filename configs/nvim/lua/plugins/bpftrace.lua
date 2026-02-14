@@ -1,4 +1,4 @@
 return {
-    "https://github.com/mmarchini/bpftrace.vim",
-    lazy = false,
+	"https://github.com/mmarchini/bpftrace.vim",
+	lazy = false,
 }

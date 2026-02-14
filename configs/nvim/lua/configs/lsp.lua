@@ -1,114 +1,76 @@
-local M = {}
-local map = vim.keymap.set
-
--- export on_attach & capabilities
-M.on_attach = function(_, bufnr)
+local on_attach = function(_, bufnr)
 	local function opts(desc)
 		return { buffer = bufnr, desc = "LSP " .. desc }
 	end
 
-	map("n", "gD", vim.lsp.buf.declaration, opts("Go to declaration"))
-	map("n", "gd", vim.lsp.buf.definition, opts("Go to definition"))
-	map("n", "<C-]>", vim.lsp.buf.definition, opts("Go to definition"))
+	local map = vim.keymap.set
+	local tb = require("telescope.builtin")
 
+	-- Hardcode 'Ctrl+]' to cscope for linux repo
+	if vim.fn.getcwd() == "/home/pavel/repos/linux" then
+		map("n", "<C-]>", ":Cstag <CR>", opts("Go to definition"))
+	else
+		map("n", "<C-]>", tb.lsp_definitions, opts("Go to definition"))
+	end
+
+	map("n", "gd", tb.lsp_definitions, opts("Go to definition"))
+	map("n", "gt", tb.lsp_type_definitions, opts("Go to type definition"))
+	map("n", "gi", tb.lsp_implementations, opts("Go to implementations"))
+	map("n", "gr", tb.lsp_references, opts("Go to references"))
+
+	-- symbols
+	map("n", "<leader>ws", tb.lsp_dynamic_workspace_symbols, opts("Workspace symbols"))
+	map("n", "<leader>wS", tb.lsp_document_symbols, opts("Document symbols"))
+
+	-- call hierarchy
+	map("n", "<leader>ci", tb.lsp_incoming_calls, opts("Incoming calls"))
+	map("n", "<leader>co", tb.lsp_outgoing_calls, opts("Outgoing calls"))
+
+	-- diagnostics
+	map("n", "<leader>ds", tb.diagnostics, opts("Diagnostics"))
+
+	-- code action by Alt+Enter like in JetBrains IDEs
+	map("n", "<M-CR>", function()
+		vim.lsp.buf.code_action()
+	end)
+
+	-- workspace folders
 	map("n", "<leader>wa", vim.lsp.buf.add_workspace_folder, opts("Add workspace folder"))
 	map("n", "<leader>wr", vim.lsp.buf.remove_workspace_folder, opts("Remove workspace folder"))
-
-    map("n", "<leader>ss", ":ClangdSwitchSourceHeader <cr>")
-
 	map("n", "<leader>wl", function()
 		print(vim.inspect(vim.lsp.buf.list_workspace_folders()))
 	end, opts("List workspace folders"))
 
-	map("n", "<leader>D", vim.lsp.buf.type_definition, opts("Go to type definition"))
-	--map("n", "<leader>ra", require "nvchad.lsp.renamer", opts "NvRenamer")
-
+	-- clangd special
+	map("n", "<leader>ss", ":LspClangdSwitchSourceHeader <cr>", opts("Switch between source/header"))
+	map("n", "<leader>si", ":LspClangdShowSymbolInfo <cr>", opts("Show symbol info"))
 end
-
--- disable semanticTokens
-M.on_init = function(client, _)
-	if client.supports_method("textDocument/semanticTokens") then
-		client.server_capabilities.semanticTokensProvider = nil
-	end
-end
-
-M.capabilities = vim.lsp.protocol.make_client_capabilities()
-
-M.capabilities.textDocument.completion.completionItem = {
-	documentationFormat = { "markdown", "plaintext" },
-	snippetSupport = true,
-	preselectSupport = true,
-	insertReplaceSupport = true,
-	labelDetailsSupport = true,
-	deprecatedSupport = true,
-	commitCharactersSupport = true,
-	tagSupport = { valueSet = { 1 } },
-	resolveSupport = {
-		properties = {
-			"documentation",
-			"detail",
-			"additionalTextEdits",
-		},
-	},
-}
 
 local servers = {
 	"gopls",
-    "lua_ls",
+	"lua_ls",
 	"sqlls",
 	"clangd",
 	"cmake",
 	"bashls",
 	"basedpyright",
 	"ts_ls",
-    "jsonls"
+	"jsonls",
+	"docker_language_server",
 }
 
-local lspconfig = require("lspconfig")
+local cap = vim.lsp.protocol.make_client_capabilities()
 
 for _, lsp in ipairs(servers) do
-	lspconfig[lsp].setup({
-		on_attach = M.on_attach,
-		on_init = M.on_init,
-		capabilities = M.capabilities,
+	vim.lsp.config(lsp, {
+		capabilities = cap,
 	})
+
+	vim.lsp.enable(lsp)
 end
 
--- M.defaults = function()
--- dofile(vim.g.base46_cache .. "lsp")
--- require("nvchad.lsp").diagnostic_config()
-
--- vim.api.nvim_create_autocmd("LspAttach", {
---   callback = function(args)
---     M.on_attach(_, args.buf)
---   end,
--- })
---
---   local lua_lsp_settings = {
---     Lua = {
---       runtime = { version = "LuaJIT" },
---       workspace = {
---         library = {
---           vim.fn.expand "$VIMRUNTIME/lua",
---           vim.fn.stdpath "data" .. "/lazy/ui/nvchad_types",
---           vim.fn.stdpath "data" .. "/lazy/lazy.nvim/lua/lazy",
---           "${3rd}/luv/library",
---         },
---       },
---     },
---   }
---
---   -- Support 0.10 temporarily
---
---   if vim.lsp.config then
---     vim.lsp.config("*", { capabilities = M.capabilities, on_init = M.on_init })
---     vim.lsp.config("lua_ls", { settings = lua_lsp_settings })
---     vim.lsp.enable "lua_ls"
---   else
---     require("lspconfig").lua_ls.setup {
---       capabilities = M.capabilities,
---       on_init = M.on_init,
---       settings = lua_lsp_settings,
---     }
---   end
--- end
+vim.api.nvim_create_autocmd("LspAttach", {
+	callback = function(ev)
+		on_attach(_, ev.buf)
+	end,
+})

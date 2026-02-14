@@ -6,7 +6,9 @@ return {
 		-- "echasnovski/mini.pick", -- optional [for picker="mini-pick"]
 		-- "folke/snacks.nvim", -- optional [for picker="snacks"]
 	},
-	opts = function ()
-	   return require("configs/cscope_maps");
+	lazy = true,
+	cmd = { "Cstag", "CsPromps", "CsStackView", "Cs" },
+	opts = function()
+		return require("configs/cscope_maps");
 	end
 }
