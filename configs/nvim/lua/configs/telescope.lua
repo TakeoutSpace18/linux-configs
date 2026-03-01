@@ -23,6 +23,6 @@ return {
 		},
 	},
 
-	extensions_list = { "themes", "terms" },
+	extensions_list = { "themes", "terms", "ui-select" },
 	extensions = {},
 }

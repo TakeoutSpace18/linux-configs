@@ -1,4 +1,4 @@
-local on_attach = function(_, bufnr)
+local on_attach = function(client, bufnr)
 	local function opts(desc)
 		return { buffer = bufnr, desc = "LSP " .. desc }
 	end
@@ -22,9 +22,12 @@ local on_attach = function(_, bufnr)
 	map("n", "<leader>ws", tb.lsp_dynamic_workspace_symbols, opts("Workspace symbols"))
 	map("n", "<leader>wS", tb.lsp_document_symbols, opts("Document symbols"))
 
+	-- hover
+	map("n", "<leader>K", vim.lsp.buf.hover, opts("Symbol documentation"))
+
 	-- call hierarchy
-	map("n", "<leader>ci", tb.lsp_incoming_calls, opts("Incoming calls"))
 	map("n", "<leader>co", tb.lsp_outgoing_calls, opts("Outgoing calls"))
+	map("n", "<leader>ci", tb.lsp_incoming_calls, opts("Incoming calls"))
 
 	-- diagnostics
 	map("n", "<leader>ds", tb.diagnostics, opts("Diagnostics"))
@@ -57,6 +60,8 @@ local servers = {
 	"ts_ls",
 	"jsonls",
 	"docker_language_server",
+	"yamlls",
+	"asm_lsp",
 }
 
 local cap = vim.lsp.protocol.make_client_capabilities()
@@ -71,6 +76,8 @@ end
 
 vim.api.nvim_create_autocmd("LspAttach", {
 	callback = function(ev)
-		on_attach(_, ev.buf)
+		local client = vim.lsp.get_client_by_id(ev.data.client_id)
+		local bufnr = ev.buf
+		on_attach(client, bufnr)
 	end,
 })
